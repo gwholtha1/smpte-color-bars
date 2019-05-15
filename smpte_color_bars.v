@@ -57,6 +57,7 @@ assign rgb = {r_on, g_on, b_on};
       b_clk <= 6'b0;
     end else begin
       b_clk <= b_clk + 1;
+    end
   end
   
   always @(posedge display_on) begin
