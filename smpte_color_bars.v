@@ -40,7 +40,7 @@ hvsync_generator hvsync_gen (
 // Green: 1 1 1 1 0 0 0
 // Blue:  1 0 1 0 1 0 1
 //
-parameter BAR_WIDTH = H_DISPLAY / 7 // Width of one vertical bar
+parameter BAR_WIDTH = H_DISPLAY / 7; // Width of one vertical bar
 
 assign rgb = {r_on, g_on, b_on};
   
@@ -51,7 +51,7 @@ assign rgb = {r_on, g_on, b_on};
       r_on <= 1;
       g_on <= 1;
       b_on <= 1;
-      b_clk <= 6`b0;
+      b_clk <= 6'b0;
     end else if (b_clk == BAR_WIDTH - 1) begin
       b_on <= ~b_on;
       b_clk <= 6'b0;
