@@ -42,9 +42,15 @@ hvsync_generator hvsync_gen (
 //
 parameter BAR_WIDTH = H_DISPLAY / 7; // Width of one vertical bar
 
+// Start a new scanline every time the horizontal position counter is reset
+assign new_scanline = hpos == 9'b0 && display_on;
+  
 assign rgb = {r_on, g_on, b_on};
   
 // RGB signals can be controlled by three levels of divided clocks
+  
+// Consider switching the blue gun every 32 clocks. This makes it easy to pick off
+// bits of hpos to determine the r_on, g_on, and b_on signals.
 
   always @(posedge clk) begin
     if (reset) begin
