@@ -47,7 +47,12 @@ assign rgb = {r_on, g_on, b_on};
 // RGB signals can be controlled by three levels of divided clocks
 
   always @(posedge clk) begin
-    if (b_clk == BAR_WIDTH - 1) begin
+    if (reset) begin
+      r_on <= 1;
+      g_on <= 1;
+      b_on <= 1;
+      b_clk <= 6`b0;
+    end else if (b_clk == BAR_WIDTH - 1) begin
       b_on <= ~b_on;
       b_clk <= 6'b0;
     end else begin
