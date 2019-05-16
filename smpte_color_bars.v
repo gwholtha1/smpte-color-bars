@@ -50,3 +50,5 @@ hvsync_generator hvsync_gen (
   assign g_on = ~hpos[7] && display_on;
   
 assign rgb = {r_on, g_on, b_on};
+  
+endmodule
