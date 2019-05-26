@@ -20,7 +20,7 @@ module smpte_color_bars(
 
   reg [4:0] frame_cnt; // Frame counter to drive LED
   
-  always @(negedge vsync) begin
+  always @(posedge vsync) begin
     if (frame_cnt == 30) begin // Toggle LED every 30 frames = 1Hz at 60 frames per second
       frame_led <= ~frame_led;
       frame_cnt <= 0;
@@ -32,8 +32,6 @@ module smpte_color_bars(
   wire display_on; // Indicates when we are in the visible portion of the display
   wire [8:0] hpos; // Horizontal position of the electron beam
   wire [8:0] vpos; // Vertical position of the electron beam
-  wire hsync; // Horizontal sync signal (positive polarity)
-  wire vsync; // Vertical sync signal (negative polarity)
   wire r_on; // signal to drive red gun
   wire g_on; // signal to drive green gun
   wire b_on; // signal to drive blue gun
@@ -54,15 +52,12 @@ module smpte_color_bars(
   hvsync_gen (
     .clk(clk2), // Use divided clock
     .reset(reset),
-    .hsync(hsync),
-    .vsync(vsync),
+    .hsync(hsync_out),
+    .vsync(vsync_out),
     .display_on(display_on),
     .hpos(hpos),
     .vpos(vpos)
   );
-
-  assign hsync_out = ~hsync; // Need negative polarity sync for TV
-  assign vsync_out = ~vsync; // Need negative polarity sync for TV
 
   // For SMPTE color bars, divide the visible screen into 7 vertical bars
   // White, yellow, cyan, green, magenta, red, blue
