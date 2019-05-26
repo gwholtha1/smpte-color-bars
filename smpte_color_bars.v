@@ -2,10 +2,13 @@
 
 module smpte_color_bars(
   input clk,
-  input reset,
-  output hsync,
-  output vsync,
-  output [2:0] rgb
+  output hsync_out,
+  output vsync_out,
+  output [2:0] rgb,
+  output reg frame_led
+  output cbl_gnd1,
+  output cbl_gnd2,
+  output cbl_gnd3,
 );
 
   // 12MHZ iCEstick FPGA clock is too fast for signal generation, need to divide
@@ -15,14 +18,32 @@ module smpte_color_bars(
     clk2 <= ~clk2;
   end
 
+  reg [4:0] frame_cnt; // Frame counter to drive LED
+  
+  always @(negedge vsync) begin
+    if (frame_cnt == 30) begin // Toggle LED every 30 frames = 1Hz at 60 frames per second
+      frame_led <= ~frame_led;
+      frame_cnt <= 0;
+    end else begin
+      frame_cnt <= frame_cnt + 1;
+    end
+  end
+  
   wire display_on; // Indicates when we are in the visible portion of the display
   wire [8:0] hpos; // Horizontal position of the electron beam
   wire [8:0] vpos; // Vertical position of the electron beam
-  reg [5:0] b_clk; // Clock signal to determine blue gun timing
+  wire hsync; // Horizontal sync signal (positive polarity)
+  wire vsync; // Vertical sync signal (negative polarity)
   wire r_on; // signal to drive red gun
   wire g_on; // signal to drive green gun
   wire b_on; // signal to drive blue gun
+  wire reset;
 
+  assign reset = 0;
+  assign cbl_gnd1 = 0; // Ground unused wires in cable
+  assign cbl_gnd2 = 0; // Ground unused wires in cable
+  assign cbl_gnd3 = 0; // Ground unused wires in cable
+  
   // Need to change default hvsync_generator scan line clock counts for clk2
   hvsync_generator #(
     .H_DISPLAY(256), // Horizontal display width
@@ -39,6 +60,9 @@ module smpte_color_bars(
     .hpos(hpos),
     .vpos(vpos)
   );
+
+  assign hsync_out = ~hsync; // Need negative polarity sync for TV
+  assign vsync_out = ~vsync; // Need negative polarity sync for TV
 
   // For SMPTE color bars, divide the visible screen into 7 vertical bars
   // White, yellow, cyan, green, magenta, red, blue
