@@ -5,10 +5,10 @@ module smpte_color_bars(
   output hsync_out,
   output vsync_out,
   output [2:0] rgb,
-  output reg frame_led
+  output reg frame_led,
   output cbl_gnd1,
   output cbl_gnd2,
-  output cbl_gnd3,
+  output cbl_gnd3
 );
 
   // 12MHZ iCEstick FPGA clock is too fast for signal generation, need to divide
@@ -20,7 +20,7 @@ module smpte_color_bars(
 
   reg [4:0] frame_cnt; // Frame counter to drive LED
   
-  always @(posedge vsync) begin
+  always @(posedge vsync_out) begin
     if (frame_cnt == 30) begin // Toggle LED every 30 frames = 1Hz at 60 frames per second
       frame_led <= ~frame_led;
       frame_cnt <= 0;
