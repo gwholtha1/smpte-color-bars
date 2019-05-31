@@ -24,11 +24,14 @@ module hvsync_generator(clk, reset, hsync, vsync, display_on, hpos, vpos);
   parameter H_BACK          =  23; // horizontal left border (back porch)
   parameter H_FRONT         =   7; // horizontal right border (front porch)
   parameter H_SYNC          =  23; // horizontal sync width
+  parameter H_SYNC_POLARITY =   0; // 0 for positive polarity, 1 for negative polarity
   // vertical constants
   parameter V_DISPLAY       = 240; // vertical display height
   parameter V_TOP           =   5; // vertical top border
   parameter V_BOTTOM        =  14; // vertical bottom border
   parameter V_SYNC          =   3; // vertical sync # lines
+  parameter V_SYNC_POLARITY =   0; // 0 for positive polarity, 1 for negative polarity
+
   // derived constants
   parameter H_SYNC_START    = H_DISPLAY + H_FRONT;
   parameter H_SYNC_END      = H_DISPLAY + H_FRONT + H_SYNC - 1;
@@ -43,7 +46,7 @@ module hvsync_generator(clk, reset, hsync, vsync, display_on, hpos, vpos);
   // horizontal position counter
   always @(posedge clk)
   begin
-    hsync <= (hpos>=H_SYNC_START && hpos<=H_SYNC_END);
+    hsync <= (H_SYNC_POLARITY ^ (hpos>=H_SYNC_START && hpos<=H_SYNC_END));
     if(hmaxxed)
       hpos <= 0;
     else
@@ -53,7 +56,7 @@ module hvsync_generator(clk, reset, hsync, vsync, display_on, hpos, vpos);
   // vertical position counter
   always @(posedge clk)
   begin
-    vsync <= (vpos>=V_SYNC_START && vpos<=V_SYNC_END);
+    vsync <= (V_SYNC_POLARITY ^ (vpos>=V_SYNC_START && vpos<=V_SYNC_END));
     if(hmaxxed)
       if (vmaxxed)
         vpos <= 0;
