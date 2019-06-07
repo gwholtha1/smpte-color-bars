@@ -2,8 +2,8 @@
 
 module smpte_color_bars(
   input clk,
-  output hsync_out,
-  output vsync_out,
+  output hsync,
+  output vsync,
   output [2:0] rgb,
   output reg frame_led,
   output cbl_gnd1,
@@ -20,7 +20,7 @@ module smpte_color_bars(
 
   reg [4:0] frame_cnt; // Frame counter to drive LED
   
-  always @(posedge vsync_out) begin
+  always @(posedge vsync) begin
     if (frame_cnt == 30) begin // Toggle LED every 30 frames = 1Hz at 60 frames per second
       frame_led <= ~frame_led;
       frame_cnt <= 0;
@@ -55,8 +55,8 @@ module smpte_color_bars(
   hvsync_gen (
     .clk(clk2), // Use divided clock
     .reset(reset),
-    .hsync(hsync_out),
-    .vsync(vsync_out),
+    .hsync(hsync),
+    .vsync(vsync),
     .display_on(display_on),
     .hpos(hpos),
     .vpos(vpos)
@@ -82,6 +82,6 @@ module smpte_color_bars(
   assign b_on = ~hpos[5] && display_on;
   assign r_on = ~hpos[6] && display_on;
   assign g_on = ~hpos[7] && display_on;
-  assign rgb = {r_on, g_on, b_on};
+  assign rgb = {b_on, g_on, r_on};
 
 endmodule
