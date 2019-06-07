@@ -43,11 +43,14 @@ module smpte_color_bars(
   assign cbl_gnd3 = 0; // Ground unused wires in cable
   
   // Need to change default hvsync_generator scan line clock counts for clk2
+  // Need to select negative sync polarity
   hvsync_generator #(
     .H_DISPLAY(256), // Horizontal display width
     .H_BACK(60), // Horizontal back porch
     .H_FRONT(40), // Horizontal front porch
-    .H_SYNC(25) // Horizontal sync width
+    .H_SYNC(25), // Horizontal sync width
+    .H_SYNC_POLARITY(1), // Negative horizontal sync polarity
+    .V_SYNC_POLARITY(1) // Negative vertical sync polarity
   )
   hvsync_gen (
     .clk(clk2), // Use divided clock
