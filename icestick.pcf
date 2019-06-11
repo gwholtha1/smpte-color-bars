@@ -1,13 +1,9 @@
 # For the iCE40HX-1K iCEstick
-
-# GWH change FPGA pin assignments to output signals on iCEstick Pmod connector
-set_io rgb[0] 87 # Pmod 7
-set_io rgb[1] 88 # Pmod 8
-set_io rgb[2] 90 # Pmod 9
-set_io hsync_out 91 # Pmod 10
-set_io vsync_out 81 # Pmod 4
-set_io cbl_gnd1 78 # Pmod 1, unused, set to logic 0
-set_io cbl_gnd2 79 # Pmod 2, unused, set to logic 1
-set_io cbl_gnd3 80 # Pmod 3, unused, set to logic 2
+# gwholtha1 output signals on iCEstick Pmod connector
+set_io rgb[0] 87    # Pmod 7, Red
+set_io rgb[1] 88    # Pmod 8, Green
+set_io rgb[2] 90    # Pmod 9, Blue
+set_io hsync 91     # Pmod 10
+set_io vsync 81     # Pmod 4
 set_io frame_led 95 # Green LED, frame indicator (blinks once per frame)
 set_io clk 21
