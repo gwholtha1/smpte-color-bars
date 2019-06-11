@@ -5,10 +5,7 @@ module smpte_color_bars(
   output hsync,
   output vsync,
   output [2:0] rgb,
-  output reg frame_led,
-  output cbl_gnd1,
-  output cbl_gnd2,
-  output cbl_gnd3
+  output reg frame_led
 );
 
   // 12MHZ iCEstick FPGA clock is too fast for signal generation, need to divide
@@ -37,10 +34,7 @@ module smpte_color_bars(
   wire b_on; // signal to drive blue gun
   wire reset;
 
-  assign reset = 0;
-  assign cbl_gnd1 = 0; // Ground unused wires in cable
-  assign cbl_gnd2 = 0; // Ground unused wires in cable
-  assign cbl_gnd3 = 0; // Ground unused wires in cable
+  assign reset = 0; // iCE40 devices automatically reset all flip flops after configuration
   
   // Need to change default hvsync_generator scan line clock counts for clk2
   // Need to select negative sync polarity
